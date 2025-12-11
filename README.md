@@ -35,6 +35,7 @@ The SQL `CREATE TABLE` statements are implemented in Python using the `sqlite3` 
 **File:** `create_tables.py` (also available in `schema_create_tables.ipynb`)
 
 
+
 ## **Task 2: ETL Process Implementation**
 
 This task involved creating a modular Python script (`etl_process.py`) to handle the Extraction, Transformation, and Loading of data from the raw source file into the **Star Schema** designed in Task 1.
@@ -62,8 +63,6 @@ This task involved creating a modular Python script (`etl_process.py`) to handle
 
 The script must be run by first deleting and recreating the database to ensure a clean schema, and then running the ETL script from its correct folder.
 
-**NOTE:** The commands below use the exact Python executable path that worked successfully on the machine to bypass environment conflicts.
-
 1.  **Clean and Re-Create Database:**
     *(This assumes `create_tables.py` is in the `Data warehouse design` folder)*
     ```bash
@@ -79,5 +78,3 @@ The script must be run by first deleting and recreating the database to ensure a
     cd ETL\ process\ implementation
     /c/Users/USER/AppData/Local/Microsoft/WindowsApps/python3.13.exe etl_process.py
     ```
-
-**Successful Output Log:**
