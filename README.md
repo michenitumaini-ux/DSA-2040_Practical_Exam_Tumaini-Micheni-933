@@ -6,7 +6,7 @@
 The data warehouse is designed using a **Star Schema** architecture centered around a sales fact table. This design was chosen to optimize analytical queries common in retail environments.
 
 #### **Star Schema Diagram**
-![Star Schema Diagram](diagrams/star_schema_retail.png)
+![Star Schema Diagram](Data_warehouse_design/diagrams/star_schema_retail.png)
 
 ### 2. Design Explanation
 **Why Star Schema over Snowflake?**
