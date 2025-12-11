@@ -33,3 +33,51 @@ The warehouse consists of one fact table and three dimension tables stored in `r
 The SQL `CREATE TABLE` statements are implemented in Python using the `sqlite3` library to ensure portability and ease of integration with the ETL pipeline.
 
 **File:** `create_tables.py` (also available in `schema_create_tables.ipynb`)
+
+
+## **Task 2: ETL Process Implementation**
+
+This task involved creating a modular Python script (`etl_process.py`) to handle the Extraction, Transformation, and Loading of data from the raw source file into the **Star Schema** designed in Task 1.
+
+### **Files and Structure**
+
+| File | Location | Purpose |
+| :--- | :--- | :--- |
+| `etl_process.py` | `ETL process implementation/` | **Core ETL Script:** Contains all functions for Extract, Transform, and Load. |
+| `create_tables.py` | (Moved to a known location) | Creates the empty Star Schema tables in `retail_dw.db`. |
+| `Online Retail.xlsx` | `ETL process implementation/` | Source data file. |
+| `retail_dw.db` | (Created by `create_tables.py`) | The final SQLite Data Warehouse. |
+
+### **ETL Process Overview**
+
+1.  **Extract:** Reads data from the `'Online Retail'` sheet in `Online Retail.xlsx`.
+2.  **Transform:**
+    * Cleans data (removes cancelled transactions and rows with missing Customer IDs).
+    * Calculates the `sales_amount` (Quantity \* UnitPrice).
+    * Generates time attributes (`year`, `quarter`, `month`, `day`) from `InvoiceDate`.
+    * Prepares distinct dimension data for loading.
+3.  **Load:** Populates the dimension tables (`TimeDim`, `CustomerDim`, `ProductDim`) first, generating surrogate keys. It then uses these keys to populate the central `SalesFact` table, ensuring data integrity and star schema adherence.
+
+### **Execution Instructions**
+
+The script must be run by first deleting and recreating the database to ensure a clean schema, and then running the ETL script from its correct folder.
+
+**NOTE:** The commands below use the exact Python executable path that worked successfully on the machine to bypass environment conflicts.
+
+1.  **Clean and Re-Create Database:**
+    *(This assumes `create_tables.py` is in the `Data warehouse design` folder)*
+    ```bash
+    cd Data\ warehouse\ design
+    rm -f retail_dw.db
+    /c/Users/USER/AppData/Local/Microsoft/WindowsApps/python3.13.exe create_tables.py
+    ```
+
+2.  **Run ETL Script:**
+    *(This assumes the terminal is returned to the project root)*
+    ```bash
+    cd ..
+    cd ETL\ process\ implementation
+    /c/Users/USER/AppData/Local/Microsoft/WindowsApps/python3.13.exe etl_process.py
+    ```
+
+**Successful Output Log:**
