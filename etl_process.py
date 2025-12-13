@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime
 
 # --- Configuration ---
-DATA_FILE = 'Online Retail.xlsx'
+DATA_FILE = 'Online Retail.xlsx' 
 DB_NAME = 'retail_dw.db'
 
 SHEET_NAME = 'Online Retail' 
@@ -50,7 +50,6 @@ def transform_data(df):
     df['sales_amount'] = df['quantity'] * df['unitprice']
     
     # 6. Time and Product Cleaning
-    df.rename(columns={'description': 'product_name'}, inplace=True)
     df['invoicedate'] = pd.to_datetime(df['invoicedate'])
     
     print(f"Transformed shape: {df.shape}")
@@ -98,18 +97,37 @@ def load_data(df, db_name):
     # --- 3. Load ProductDim ---
     print("Loading ProductDim...")
     product_df = df[['stockcode', 'product_name', 'unitprice']].drop_duplicates(subset=['stockcode']).reset_index(drop=True)
-    product_df.rename(columns={'unitprice': 'unit_price'}, inplace=True)
-    # Placeholder values for Category/Brand not available in the source data
-    product_df['category'] = 'Giftware'
-    product_df['brand'] = 'N/A'
     
-    product_df[['stockcode', 'product_name', 'unit_price', 'category', 'brand']].to_sql(
+    # Create the surrogate key
+    product_df.index.name = 'product_id'
+    product_df = product_df.reset_index()
+    
+  # Standardize column names for insertion to match the ProductDim schema
+    product_df.rename(columns={'description': 'product_name', 'unitprice': 'unit_price'}, inplace=True)
+    
+    # Add placeholder columns (since the data doesn't provide them but the schema requires them)
+    product_df['category'] = 'Unknown'
+    product_df['brand'] = 'Generic'
+    
+    # This list must be an EXACT match for the columns in ProductDim in your create_tables.py
+    product_data_to_insert = product_df[[
+        'product_id', 
+        'stock_code', 
+        'product_name', 
+        'category', 
+        'brand', 
+        'unit_price'
+    ]]
+    
+    product_data_to_insert.to_sql(
         'ProductDim', conn, if_exists='append', index=False
     )
+    
     # Create a mapping for easy lookup later
-    product_map = pd.read_sql("SELECT product_id, stock_code FROM ProductDim", conn).set_index('stock_code')['product_id'].to_dict()
-
-
+    # This must use the column names available in the table
+    product_map = pd.read_sql("SELECT product_id, stockcode FROM ProductDim", conn).set_index('stockcode')['product_id'].to_dict()
+    
+    
     # --- 4. Load SalesFact ---
     print("Loading SalesFact...")
     fact_df = df.copy()
@@ -119,12 +137,12 @@ def load_data(df, db_name):
     fact_df['customer_id'] = fact_df['customerid'].map(customer_map)
     fact_df['product_id'] = fact_df['stockcode'].map(product_map)
 
-    # Select and rename columns for the fact table
+    # Select and rename columns for the fact table - INCLUDE 'country' to match schema!
     sales_fact_data = fact_df[[
-        'invoiceno', 'product_id', 'customer_id', 'time_id', 'quantity', 'unitprice', 'sales_amount', 'country'
+        'invoiceno', 'product_id', 'customer_id', 'time_id', 'quantity', 'unitprice', 'sales_amount', 'country' 
     ]]
     sales_fact_data.rename(columns={'invoiceno': 'invoice_no', 'unitprice': 'unit_price'}, inplace=True)
-
+    
     # Load into the Fact table
     sales_fact_data.to_sql(
         'SalesFact', conn, if_exists='append', index=False

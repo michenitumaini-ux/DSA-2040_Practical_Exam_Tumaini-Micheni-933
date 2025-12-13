@@ -4,7 +4,7 @@ def create_tables(db_name='retail_dw.db'):
     """
     Creates the retail data warehouse tables in SQLite.
     """
-    # Connect to (or create) the database
+    # Connect to the database
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
 

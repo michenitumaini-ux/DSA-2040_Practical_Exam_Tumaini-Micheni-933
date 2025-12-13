@@ -78,3 +78,129 @@ The script must be run by first deleting and recreating the database to ensure a
     cd ETL\ process\ implementation
     /c/Users/USER/AppData/Local/Microsoft/WindowsApps/python3.13.exe etl_process.py
     ```
+## **Task 3: OLAP Queries and Analysis**
+Overview
+
+This task focuses on performing OLAP (Online Analytical Processing) queries on a retail Data Warehouse implemented using a star schema in SQLite. The objective is to analyze sales data across multiple dimensions such as time, customer location, and product information in order to support business decision-making.
+
+The analysis demonstrates core OLAP operations including roll-up, drill-down, and slice, as well as basic data visualization.
+
+Data Warehouse Structure
+
+The Data Warehouse follows a star schema design and consists of the following tables:
+
+Dimension Tables
+
+CustomerDim: Stores customer demographic and geographic details
+(e.g., name, gender, age, country, city, segment)
+
+ProductDim: Stores product-related information
+(e.g., stock code, product name, category, brand, unit price)
+
+TimeDim: Stores time-based attributes
+(e.g., date, day, month, quarter, year, weekend indicator)
+
+Fact Table
+
+SalesFact: Stores transactional sales data
+(e.g., invoice number, quantity, unit price, sales amount)
+and links to all dimension tables using foreign keys.
+
+Tools and Technologies Used
+
+Python
+
+SQLite (Data Warehouse storage)
+
+Pandas (data querying and analysis)
+
+Matplotlib (data visualization)
+
+Files Included
+File Name	Description
+create_tables.py	Creates the Data Warehouse schema (fact and dimension tables)
+olap_queries.py	Executes OLAP queries and generates analysis outputs
+retail_dw.db	SQLite database containing the Data Warehouse
+sales_by_country_visualization.png	Output visualization generated from OLAP analysis
+OLAP Queries Performed
+1. Roll-Up Analysis
+
+Objective:
+To analyze total sales aggregated by country and quarter.
+
+Description:
+This query groups sales data by country, year, and quarter, allowing analysis at a higher level of time granularity. The results are ordered by total sales and limited to the top 10 highest-performing combinations.
+
+OLAP Operation Used:
+
+Roll-up (from detailed transactions to quarterly summaries)
+
+2. Drill-Down Analysis
+
+Objective:
+To examine monthly sales performance for the United Kingdom.
+
+Description:
+This query focuses on a single country and breaks down sales from a higher level into monthly totals, including both sales revenue and quantity sold. The top 10 months by sales value are displayed.
+
+OLAP Operation Used:
+
+Drill-down (from country-level data to month-level detail)
+
+3. Slice Analysis
+
+Objective:
+To analyze sales trends for a specific subset of products over time.
+
+Description:
+This query filters the dataset to include only products whose names contain the keyword “SET”, serving as a proxy for a product category. Sales are then aggregated by year to observe performance trends.
+
+OLAP Operation Used:
+
+Slice (filtering the cube on a specific product condition)
+
+Visualization
+
+Objective:
+To visually compare sales performance across different countries.
+
+Description:
+A bar chart is generated showing the top 5 countries by total sales. This visualization helps identify the most profitable markets at a glance.
+
+X-axis: Country
+
+Y-axis: Total Sales
+
+Output file: sales_by_country_visualization.png
+
+How to Run the Analysis
+
+Create the Data Warehouse tables
+
+python create_tables.py
+
+
+Run the OLAP queries and generate analysis
+
+python olap_queries.py
+
+
+View Results
+
+Query outputs are displayed in the terminal in tabular format
+
+Visualization is saved as an image file in the project directory
+
+Key Insights
+
+OLAP operations enable efficient multi-dimensional analysis of large datasets.
+
+Roll-up, drill-down, and slice operations provide flexibility in analyzing data at different levels of detail.
+
+Visualizations complement OLAP queries by improving interpretability and supporting strategic decision-making.
+
+Conclusion
+
+Task 3 successfully demonstrates the use of OLAP techniques on a retail Data Warehouse. By combining structured SQL queries, Python-based analysis, and visualization, the task highlights how analytical processing can transform raw transactional data into meaningful business insights.
+
+
