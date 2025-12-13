@@ -1,0 +1,4 @@
+customer_id,recency,frequency,monetary,Segment_Name
+1,10,10,5000,01_Champions
+2,50,5,500,02_Loyal_Customers
+3,200,1,50,03_Losing_Customers
