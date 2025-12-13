@@ -231,7 +231,7 @@ The script connects to the `retail_dw.db` and calculates the metrics based on a 
     * *Calculation:* `SUM(sales_amount)`
 
 ### Execution (Feature Generation)
-```bash
+
 python rfm_feature_engineering.py
 
 ## Task 2: Customer Segmentation Using Clustering
@@ -353,7 +353,6 @@ The script loads the clustered RFM data, splits it into training and testing set
 3.  **Evaluation:** Both models are evaluated on the test set, computing standard metrics (Accuracy, Precision, Recall, F1-Score).
 
 #### Execution (Model Training and Evaluation)
-```bash
 python classification.py
 
 
